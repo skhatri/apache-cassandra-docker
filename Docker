@@ -1,0 +1,24 @@
+FROM skhatri/dev-base
+
+MAINTAINER Suresh Khatri, kc2005au@gmail.com
+
+
+#Either get from apache or local
+RUN wget http://mirror.rackcentral.com.au/apache/cassandra/2.1.2/apache-cassandra-2.1.2-bin.tar.gz -O /tmp/apache-cassandra-2.1.2-bin.tar.gz
+
+#COPY apache-cassandra-2.1.2-bin.tar.gz /tmp/
+
+
+RUN mkdir -p /opt/local && cd /opt/local && tar zxf /tmp/apache-cassandra-2.1.2-bin.tar.gz && rm -rf /tmp/apache-cassandra-2.1.2-bin.tar.gz
+
+ADD init.sh /opt/local/apache-cassandra-2.1.2/bin/init.sh
+ADD ip.sh /opt/local/apache-cassandra-2.1.2/bin/ip.sh
+ADD cassandra.yaml.template /opt/local/apache-cassandra-2.1.2/conf/cassandra.yaml.template
+
+ENV CASSANDRA_HOME /opt/local/apache-cassandra-2.1.2
+
+EXPOSE 9160 9042
+
+ENV PATH $PATH:$CASSANDRA_HOME/bin
+
+
